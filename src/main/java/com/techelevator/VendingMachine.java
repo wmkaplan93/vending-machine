@@ -9,6 +9,13 @@ import java.util.Scanner;
 
 public class VendingMachine {
 	
+	public void inventoryList() {
+		ProductMap newMap = new ProductMap();
+		newMap.populateProductMap(productGenerator);
+	}
+	
+	
+	
 	Map <String, VendingMachineProduct> productGenerator = new HashMap<String, VendingMachineProduct>();
 	
 	public void getOptionsList() {
@@ -19,10 +26,6 @@ public class VendingMachine {
 				
 				String s = fileInput.nextLine();
 				System.out.println(s);
-				
-//				String[] stringArray = s.split("\\|");
-//				VendingMachineProduct product1 = new VendingMachineProduct(stringArray[1], stringArray[2]);
-//				productGenerator.put(stringArray[0], product1);
 			}			
 			
 		} catch (FileNotFoundException e) {
@@ -31,12 +34,15 @@ public class VendingMachine {
 }
 	
 	
+	@SuppressWarnings("resource")
 	public void purchaseMenu() {
 		
-		ProductMap newMap = new ProductMap();
-		
 		Scanner userInput = new Scanner(System.in);
+		
+		
+		ProductMap newMap = new ProductMap();
 		newMap.populateProductMap(productGenerator);
+		
 		
 		System.out.println("");
 		System.out.println("[1] add some dough");
@@ -45,24 +51,43 @@ public class VendingMachine {
 		
 		String userChoice = userInput.nextLine();
 		
-		while(userChoice != null) {
 
-			if("2".equals(userChoice)) {
-				System.out.println("What would you like? [B1, C2 etc] ");
-				String userLocation = userInput.nextLine();
-				if(productGenerator.containsKey(userLocation)) {
-					System.out.println();
-					System.out.println("Success");
-					System.out.println(productGenerator.get(userLocation));
-					
-					System.exit(1);
-				}
-				System.out.println("Not a valid selection, please try again.");
-			} else if ("3".equals(userChoice)) {
-				System.exit(0);
-			}
-		}
 		
+			while(userChoice != null) {
+	
+				while("2".equals(userChoice) && !"Q".equalsIgnoreCase(userChoice)) {
+					System.out.println("What would you like? [B1, C2 (Or type 'Q' to return)] ");
+					String userLocation = userInput.nextLine();
+					if(productGenerator.containsKey(userLocation)) {
+						productGenerator.get(userLocation).returnMessage();
+						System.out.println();
+						if (productGenerator.get(userLocation).getCount() == 0) {
+							System.out.println("Sorry, sold out!");
+							System.out.println("Please make another selection");
+						}
+						productGenerator.get(userLocation).reduceCount();
+						System.out.println("Please make another selection, or type 'Q' to return. ");
+						userLocation = userInput.nextLine();
+						if("Q".equals(userLocation)) {
+							break;
+						}
+
+//					} else if ("Q".equalsIgnoreCase(userLocation)) {
+//						continue;
+//
+//					} else {
+//						System.out.println("Not a valid selection, please try again.");
+//					}
+
+
+					}
+				
+				
+//				} else if ("3".equals(userChoice)) {
+//					System.exit(0);
+				}
+				break;
+			}
 	}
 
 }

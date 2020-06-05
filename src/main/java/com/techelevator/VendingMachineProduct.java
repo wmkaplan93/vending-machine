@@ -6,7 +6,7 @@ public abstract class VendingMachineProduct {
 	//know type (candy/soda/chips/gum)
 	private String productName;
 	private String productPrice;
-	private int count;
+	protected int count;
 	
 
 
@@ -15,7 +15,7 @@ public abstract class VendingMachineProduct {
 	public VendingMachineProduct(String productName, String productPrice) {
 		this.productName = productName;
 		this.productPrice = productPrice;
-		count = 5;
+		//count = 5;
 	}
 	
 	
@@ -38,6 +38,10 @@ public abstract class VendingMachineProduct {
 	}
 	
 	abstract String returnMessage();
+	
+	abstract String reduceCount();
+	
+	abstract String displayCount();
 
 	//*********
 	

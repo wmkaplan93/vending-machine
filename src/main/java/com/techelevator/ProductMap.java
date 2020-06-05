@@ -2,7 +2,6 @@ package com.techelevator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -20,21 +19,22 @@ public class ProductMap {
 			while(fileInput.hasNextLine()) {
 				
 				String s = fileInput.nextLine();
-				System.out.println(s);
+				System.out.print(s + "|");
 				String[] stringArray = s.split("\\|");
 				if(stringArray[3].equals("Candy")) {
-					Candy productCandy = new Candy(stringArray[1], stringArray[2]);
+					Candy productCandy = new Candy(stringArray[1], stringArray[2], 5);
 					productGenerator.put(stringArray[0], productCandy);
 				} else if(stringArray[3].equals("Chip")) {
-					Chip productChip = new Chip(stringArray[1], stringArray[2]);
+					Chip productChip = new Chip(stringArray[1], stringArray[2], 5);
 					productGenerator.put(stringArray[0], productChip);
 				} else if(stringArray[3].equals("Gum")) {
-					Gum productGum = new Gum(stringArray[1], stringArray[2]);
+					Gum productGum = new Gum(stringArray[1], stringArray[2], 5);
 					productGenerator.put(stringArray[0], productGum);
 				} else {
-					Drink productDrink = new Drink(stringArray[1], stringArray[2]);
+					Drink productDrink = new Drink(stringArray[1], stringArray[2], 5);
 					productGenerator.put(stringArray[0], productDrink);
 				}
+				System.out.println(productGenerator.get(stringArray[0]).displayCount());
 				//VendingMachineProduct product1 = new VendingMachineProduct(stringArray[1], stringArray[2]);
 				//productGenerator.put(stringArray[0], product1);
 				

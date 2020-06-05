@@ -1,13 +1,10 @@
 package com.techelevator;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class UserInterface {
 
+	@SuppressWarnings({ "resource", "unused" })
 	public static void main(String[] args) {
 		
 		VendingMachine steve = new VendingMachine();
@@ -42,6 +39,7 @@ public class UserInterface {
 				userChoice = userInput.nextLine();
 			}
 		}
+		
 	}
 	
 	

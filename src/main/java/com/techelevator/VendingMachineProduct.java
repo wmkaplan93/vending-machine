@@ -6,59 +6,35 @@ public abstract class VendingMachineProduct {
 	//know type (candy/soda/chips/gum)
 	private String productName;
 	private String productPrice;
-	protected int count;
-	
-
-
 
 
 	public VendingMachineProduct(String productName, String productPrice) {
 		this.productName = productName;
 		this.productPrice = productPrice;
-		//count = 5;
 	}
 	
 	
 	
 	//*********
 	public String getProductName() {
+		System.out.println(productName);
 		return productName;
 	}
 
 	public String getProductPrice() {
+		System.out.println(productPrice);
 		return productPrice;
 	}
 	
 	public String toString() {
 		return productName + " " + productPrice;
 	}
-	
-	public int getCount() {
-		return count;
-	}
+
 	
 	abstract String returnMessage();
-	
-	abstract String reduceCount();
-	
-	abstract String displayCount();
+
 
 	//*********
 	
-//	public String productMessage() {
-//		String munch = "Munch Munch, Yum!";
-//		String crunch = "";
-//		String glug = "";
-//		String chew = "";
-//		if (productType.equals("Candy")) {
-//			return munch;
-//		} else if (productType.equals("Chip")) {
-//			return glug;
-//		} else if (productType.equals("Gum")) {
-//			return chew;
-//		}
-//		return crunch;
-//		
-//	}
 
 }

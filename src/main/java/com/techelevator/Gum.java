@@ -2,35 +2,16 @@ package com.techelevator;
 
 public class Gum extends VendingMachineProduct{
 	
-	private int count = 5;
-	
-	public Gum(String productName, String productPrice, int count) {
+	public Gum(String productName, String productPrice)  {
 		super(productName, productPrice);
-		this.count = count;
 	}
 
 	@Override
 	public String returnMessage() {
-		System.out.println("Chew Chew, Yum!");
-		return "Chew Chew, Yum!";
+		System.out.println("Munch Munch, Yum!");
+		return null;
 	}
 	
-	public String reduceCount() {
-		if(count > 0) {
-			count--;
-		} 
-		return "Sold Out";
-		
-	}
-	
-	public String displayCount() {
-		if(count > 0) {
-			System.out.println(" " + count + " available");
-		} else if (count == 0) {
-			System.out.println("Sold Out");
-		}
-		return "";
-	}
 	
 
 }

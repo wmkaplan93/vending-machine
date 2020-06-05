@@ -4,11 +4,11 @@ import java.util.Scanner;
 
 public class UserInterface {
 
-	@SuppressWarnings({ "resource", "unused" })
+	@SuppressWarnings({ "resource" })
 	public static void main(String[] args) {
 		
-		VendingMachine steve = new VendingMachine();
-		ProductMap steveMap = new ProductMap();
+		VendingMachine steve = new VendingMachine("vendingmachine.csv");
+		steve.populateProductMap();
 		Scanner userInput = new Scanner(System.in);
 		
 		

@@ -1,5 +1,9 @@
 package com.techelevator;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class UserInterface {
@@ -20,7 +24,7 @@ public class UserInterface {
 		
 		while (userChoice != null) {
 			if ("1".equals(userChoice)) {
-				steveMap.populateProductMap();
+				steve.getOptionsList();
 				System.out.println("");
 				System.out.println("What would you like to do next? ");
 				System.out.println("[1] See available products.");
@@ -39,5 +43,6 @@ public class UserInterface {
 			}
 		}
 	}
-
+	
+	
 }

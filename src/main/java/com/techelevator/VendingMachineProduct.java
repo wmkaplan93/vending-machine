@@ -1,16 +1,12 @@
 package com.techelevator;
 
-public class VendingMachineProduct {
+public abstract class VendingMachineProduct {
 	
 	//they know what they are
 	//know type (candy/soda/chips/gum)
-	//knows price
 	private String productName;
-	//private String productType;
 	private String productPrice;
-	//VM knows private String productLocation;
-	//VM knows private String productAmount;
-	private String count;
+	private int count;
 	
 
 
@@ -18,11 +14,8 @@ public class VendingMachineProduct {
 
 	public VendingMachineProduct(String productName, String productPrice) {
 		this.productName = productName;
-		//this.productType = productType;
 		this.productPrice = productPrice;
-		//this.productLocation = productLocation;
-		//this.productAmount = productAmount;
-		count = "5";
+		count = 5;
 	}
 	
 	
@@ -39,6 +32,12 @@ public class VendingMachineProduct {
 	public String toString() {
 		return productName + " " + productPrice;
 	}
+	
+	public int getCount() {
+		return count;
+	}
+	
+	abstract String returnMessage();
 
 	//*********
 	

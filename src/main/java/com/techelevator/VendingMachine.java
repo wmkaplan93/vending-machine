@@ -9,10 +9,10 @@ import java.util.Scanner;
 
 public class VendingMachine {
 	
-	public void inventoryList() {
-		ProductMap newMap = new ProductMap();
-		newMap.populateProductMap(productGenerator);
-	}
+//	public void inventoryList() {
+//		ProductMap newMap = new ProductMap();
+//		newMap.populateProductMap(productGenerator);
+//	}
 	
 	
 	

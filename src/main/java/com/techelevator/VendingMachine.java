@@ -64,7 +64,9 @@ public class VendingMachine {
 		Scanner userInput = new Scanner(System.in);
 		
 		
-		System.out.println("Welcome to the Vendomatic 800!");
+		System.out.println("Welcome to the Stupendous Tech Elevator Vending Experience [STEVE]!");
+		System.out.println("How might we vend you today?");
+		System.out.println("");
 		System.out.println("[1] See available products.");
 		System.out.println("[2] Make a purchase.");
 		System.out.println("[3] Exit.");

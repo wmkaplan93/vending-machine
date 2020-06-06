@@ -366,7 +366,7 @@ public class VendingMachine {
 				try(FileOutputStream file = new FileOutputStream(logFile, true);
 					PrintWriter pwFile = new PrintWriter(file)){
 					
-					pwFile.println(auditDate.toString() + " GIVE CHANGE: " + df.format(balance) + " $0.00");
+					pwFile.println(auditDate.toString() + " GIVE CHANGE: " + "$" + df.format(balance) + " $0.00");
 					
 				} catch (FileNotFoundException e) {
 					

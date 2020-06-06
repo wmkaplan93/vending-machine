@@ -17,12 +17,11 @@ public abstract class VendingMachineProduct {
 	
 	//*********
 	public String getProductName() {
-		System.out.println(productName);
+		System.out.print(productName);
 		return productName;
 	}
 
 	public String getProductPrice() {
-		System.out.println(productPrice);
 		return productPrice;
 	}
 	

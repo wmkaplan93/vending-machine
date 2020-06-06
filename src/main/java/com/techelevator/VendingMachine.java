@@ -17,9 +17,7 @@ public class VendingMachine {
 	 * -display inventory - getOptionList()
 	 * 
 	 * ToDo:
-	 * Vend
-	 *  - Money
-	 * Money System
+	 * change system
 	 * Log
 	 * Tests
 	 * Optional - Sales Report
@@ -48,14 +46,49 @@ public class VendingMachine {
 		return productGenerator;
 	}
 
-
-
-
 	public String getInputFile() {
 		return inputFile;
 	}
+	
 	//*****
 
+	@SuppressWarnings("resource")
+	public void mainMenu() {
+		Scanner userInput = new Scanner(System.in);
+		
+		
+		System.out.println("Welcome to the Vendomatic 800!");
+		System.out.println("[1] See available products.");
+		System.out.println("[2] Make a purchase.");
+		System.out.println("[3] Exit.");
+		System.out.println("Please make a selection: ");
+		String userChoice = userInput.nextLine();
+		
+		while (userChoice != null) {
+			if ("1".equals(userChoice)) {
+				getOptionsList();
+				System.out.println("");
+				System.out.println("What would you like to do next? ");
+				System.out.println("[1] See available products.");
+				System.out.println("[2] Make a purchase.");
+				System.out.println("[3] Finish Transaction.");
+				System.out.println("Please make a selection: ");
+				userChoice = userInput.nextLine();
+			} else if ("2".equals(userChoice)) {
+				purchaseMenu();
+			} else if ("3".equals(userChoice)) {
+				System.out.println("Thank you, come again!");
+				returnChange();
+				System.exit(0);
+			} else {
+				System.out.println("Sorry, that's not a valid selection, please try again.");
+				userChoice = userInput.nextLine();
+			}
+		}
+	}
+	
+	
+	
 
 
 	public void getOptionsList() {
@@ -65,7 +98,13 @@ public class VendingMachine {
 			while(fileInput.hasNextLine()) {
 				
 				String s = fileInput.nextLine();
-				System.out.println(s);
+				String[] stringArray = s.split("\\|");
+				if (inventoryCount.get(stringArray[0]) == 0) {
+					System.out.println(s + ": SOLD OUT");
+				} else {
+					System.out.print(s + ": ");
+					System.out.println(inventoryCount.get(stringArray[0]) + " available");
+				}
 			}			
 			
 		} catch (FileNotFoundException e) {
@@ -80,9 +119,9 @@ public class VendingMachine {
 		Scanner userInput = new Scanner(System.in);
 		
 		System.out.println("");
-		System.out.println("[1] add some dough");
-		System.out.println("[2] choose a thing");
-		System.out.println("[3] scram");
+		System.out.println("[1] Add money to my balance.");
+		System.out.println("[2] Select an item.");
+		System.out.println("[3] Return to the main menu.");
 		
 		String userChoice = userInput.nextLine();
 		
@@ -97,38 +136,56 @@ public class VendingMachine {
 							
 							String s = fileInput.nextLine();
 							String[] stringArray = s.split("\\|");
-							System.out.print(s + ": ");
-							System.out.println(inventoryCount.get(stringArray[0]));
+							if (inventoryCount.get(stringArray[0]) == 0) {
+								System.out.println(s + ": SOLD OUT");
+							} else {
+								System.out.print(s + ": ");
+								System.out.println(inventoryCount.get(stringArray[0]) + " available");
+							}
 						}			
 						
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
 					}
-					
-					System.out.println("What would you like? [B1, C2 (Or type 'Q' to return)] ");
-					String userLocation = userInput.nextLine();
-					if(productGenerator.containsKey(userLocation) && (int)inventoryCount.get(userLocation) != 0) {
-						productGenerator.get(userLocation).getProductName();
-						System.out.println("Subtracting " + productGenerator.get(userLocation).getProductPrice() + " from your balance.");
-						System.out.println("Remaining Balance: " + balance);
-						productGenerator.get(userLocation).returnMessage();
-						System.out.println();
-					} else {
-						System.out.println("Sorry, " + productGenerator.get(userLocation) + " is sold out!");
-						System.out.println("Please make another selection");
-					}
-						
-					inventoryCount.put(userLocation, (inventoryCount.get(userLocation)-1) );
-					purchaseMenu();
-
-					if("Q".equals(userLocation)) {
-						break;
+					try {
+						System.out.println("");
+						System.out.println("What would you like? [B1, C2 (Or type 'Q' to return)] ");
+						System.out.println("");
+						String userLocation = userInput.nextLine();
+						if ("Q".equalsIgnoreCase(userLocation)) {
+							purchaseMenu();
+						} else if(balance >= Double.parseDouble(productGenerator.get(userLocation).getProductPrice())) {
+							if(productGenerator.containsKey(userLocation) && (int)inventoryCount.get(userLocation) != 0) {
+								productGenerator.get(userLocation).getProductName();
+								System.out.print(" selected. ");
+								productGenerator.get(userLocation).returnMessage();
+								System.out.println("Subtracting " + productGenerator.get(userLocation).getProductPrice() + " from your balance.");
+								System.out.println("Remaining Balance: " + (balance -= Double.parseDouble(productGenerator.get(userLocation).getProductPrice())));
+								System.out.println();
+							} else if ((int)inventoryCount.get(userLocation) == 0){
+								System.out.println("Sorry, " + productGenerator.get(userLocation) + " is sold out!");
+								System.out.println("Please make another selection");
+							}
+						} else {
+							System.out.println("Sorry, insufficient funds for this purchase. Please add more money and try again.");
+							purchaseMenu();
+						}
+							
+						inventoryCount.put(userLocation, (inventoryCount.get(userLocation)-1) );
+						purchaseMenu();
+	
+						if("Q".equals(userLocation)) {
+							break;
+						}
+					} catch (NullPointerException e) {
+						System.out.println("Please make a valid selection in the form of 'B1' 'C2' etc.");
+						System.out.println("");
 					}
 
 				} else if("1".equals(userChoice)) {
 					feedMoney();
 				} else if("3".equals(userChoice)) {
-					System.exit(0);
+					mainMenu();
 				} else {
 					System.out.println("Please enter a valid command. ");
 					purchaseMenu();
@@ -175,6 +232,7 @@ public class VendingMachine {
 		
 		
 		//feed money method
+		@SuppressWarnings("resource")
 		public void feedMoney() {
 			Scanner userInput = new Scanner(System.in);
 			
@@ -191,6 +249,27 @@ public class VendingMachine {
 				System.out.println("Please enter a valid whole dollar amount.");
 			}
 			
+		}
+		
+		//change method
+		
+		public void returnChange() {
+			int countQ = 0;
+			int countD = 0;
+			int countN = 0;
+			int countP = 0;
+			balance = balance * 100; //320 cents
+			countQ = (int) (balance / 25); //12 quarters, 20 cents
+			countD = (int) ((balance % 25) / 10); //2 dimes, 0 cents
+			countN = (int) (((balance % 25) % 10) / 5);
+			countP = (int) ((((balance % 25) % 10) % 5) / 1);
+			System.out.println("Your change is: ");
+			System.out.println(countQ + " Quarters");
+			System.out.println(countD + " Dimes");
+			System.out.println(countN + " Nickles");
+			System.out.println(countP + " Pennies");
+			System.out.println("");
+			System.out.println("Have a Vend-tastic day!");
 		}
 		
 		

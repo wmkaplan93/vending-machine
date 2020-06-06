@@ -2,6 +2,7 @@ package com.techelevator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -17,7 +18,6 @@ public class VendingMachine {
 	 * -display inventory - getOptionList()
 	 * 
 	 * ToDo:
-	 * change system
 	 * Log
 	 * Tests
 	 * Optional - Sales Report
@@ -49,6 +49,13 @@ public class VendingMachine {
 	public String getInputFile() {
 		return inputFile;
 	}
+	
+	DecimalFormat df = new DecimalFormat("#.##");
+	
+	
+	
+	
+	
 	
 	//*****
 
@@ -160,7 +167,7 @@ public class VendingMachine {
 								System.out.print(" selected. ");
 								productGenerator.get(userLocation).returnMessage();
 								System.out.println("Subtracting " + productGenerator.get(userLocation).getProductPrice() + " from your balance.");
-								System.out.println("Remaining Balance: " + (balance -= Double.parseDouble(productGenerator.get(userLocation).getProductPrice())));
+								System.out.println("Remaining Balance: " + (df.format(balance -= Double.parseDouble(productGenerator.get(userLocation).getProductPrice()))));
 								System.out.println();
 							} else if ((int)inventoryCount.get(userLocation) == 0){
 								System.out.println("Sorry, " + productGenerator.get(userLocation) + " is sold out!");
@@ -244,7 +251,7 @@ public class VendingMachine {
 				purchaseMenu();
 			} else if(Integer.parseInt(moreMoney) == 1 || Integer.parseInt(moreMoney) == 2 || Integer.parseInt(moreMoney) == 5 || Integer.parseInt(moreMoney) == 10) {
 				balance += Double.parseDouble(moreMoney);
-				System.out.println("Current Balance: " + balance);
+				System.out.println("Current Balance: " + df.format(balance));
 			} else {
 				System.out.println("Please enter a valid whole dollar amount.");
 			}
@@ -258,12 +265,13 @@ public class VendingMachine {
 			int countD = 0;
 			int countN = 0;
 			int countP = 0;
-			balance = balance * 100; //320 cents
+			balance = Double.parseDouble(df.format(balance * 100)); //320 cents
 			countQ = (int) (balance / 25); //12 quarters, 20 cents
 			countD = (int) ((balance % 25) / 10); //2 dimes, 0 cents
 			countN = (int) (((balance % 25) % 10) / 5);
 			countP = (int) ((((balance % 25) % 10) % 5) / 1);
 			System.out.println("Your change is: ");
+			System.out.println(balance / 100);
 			System.out.println(countQ + " Quarters");
 			System.out.println(countD + " Dimes");
 			System.out.println(countN + " Nickles");

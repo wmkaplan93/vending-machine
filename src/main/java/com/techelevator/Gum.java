@@ -8,7 +8,7 @@ public class Gum extends VendingMachineProduct{
 
 	@Override
 	public String returnMessage() {
-		System.out.println("Munch Munch, Yum!");
+		System.out.println("Chew Chew, Yum!");
 		return null;
 	}
 	

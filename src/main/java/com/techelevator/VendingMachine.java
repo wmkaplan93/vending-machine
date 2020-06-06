@@ -2,7 +2,11 @@ package com.techelevator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -32,7 +36,11 @@ public class VendingMachine {
 	private String inputFile;
 	private double balance = 0.00;
 	private Map<String, Integer> inventoryCount = new HashMap<String, Integer>();
-	
+	private Date auditDate = new Date();
+	private int logMoreMoney;
+	private VendingMachineProduct logItem;
+	private String logItemLocation;
+	private String newBalance;
 	
 	public VendingMachine(String inputFile) {
 		this.inputFile = inputFile;
@@ -165,11 +173,15 @@ public class VendingMachine {
 							purchaseMenu();
 						} else if(balance >= Double.parseDouble(productGenerator.get(userLocation).getProductPrice())) {
 							if(productGenerator.containsKey(userLocation) && (int)inventoryCount.get(userLocation) != 0) {
+								logItem = productGenerator.get(userLocation);
+								logItemLocation = userLocation;
 								productGenerator.get(userLocation).getProductName();
 								System.out.print(" selected. ");
 								productGenerator.get(userLocation).returnMessage();
 								System.out.println("Subtracting " + productGenerator.get(userLocation).getProductPrice() + " from your balance.");
 								System.out.println("Remaining Balance: " + (df.format(balance -= Double.parseDouble(productGenerator.get(userLocation).getProductPrice()))));
+								newBalance = (df.format(balance -= Double.parseDouble(productGenerator.get(userLocation).getProductPrice())));
+								printSalesLog();
 								System.out.println();
 							} else if ((int)inventoryCount.get(userLocation) == 0){
 								System.out.println("Sorry, " + productGenerator.get(userLocation) + " is sold out!");
@@ -252,8 +264,10 @@ public class VendingMachine {
 			if ("Q".equalsIgnoreCase(moreMoney)){
 				purchaseMenu();
 			} else if(Integer.parseInt(moreMoney) == 1 || Integer.parseInt(moreMoney) == 2 || Integer.parseInt(moreMoney) == 5 || Integer.parseInt(moreMoney) == 10) {
+				logMoreMoney = Integer.parseInt(moreMoney);
 				balance += Double.parseDouble(moreMoney);
 				System.out.println("Current Balance: " + df.format(balance));
+				printFeedLog();
 			} else {
 				System.out.println("Please enter a valid whole dollar amount.");
 			}
@@ -267,6 +281,7 @@ public class VendingMachine {
 			int countD = 0;
 			int countN = 0;
 			int countP = 0;
+			printChangeLog();
 			balance = Double.parseDouble(df.format(balance * 100)); //320 cents
 			countQ = (int) (balance / 25); //12 quarters, 20 cents
 			countD = (int) ((balance % 25) / 10); //2 dimes, 0 cents
@@ -282,5 +297,86 @@ public class VendingMachine {
 			System.out.println("Have a Vend-tastic day!");
 		}
 		
+		
+		public void printFeedLog() {
+			
+			File logFile = new File("Log.txt");
+			
+			if(!logFile.exists()) {
+				try {
+					logFile.createNewFile();
+				} catch (IOException e) {
+					System.out.println("Unable to create a new file.");
+				}
+			} 
+			
+			try(FileOutputStream file = new FileOutputStream(logFile, true);
+				PrintWriter pwFile = new PrintWriter(file)){
+				
+				pwFile.println(auditDate.toString() + " FEED MONEY " + "$" + logMoreMoney + " $" + balance);
+				
+			} catch (FileNotFoundException e) {
+				
+				e.printStackTrace();
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+			
+		}
+		
+		public void printSalesLog() {
+			
+			File logFile = new File("Log.txt");
+			
+			if(!logFile.exists()) {
+				try {
+					logFile.createNewFile();
+				} catch (IOException e) {
+					System.out.println("Unable to create a new file.");
+				}
+			} 
+			
+			try(FileOutputStream file = new FileOutputStream(logFile, true);
+				PrintWriter pwFile = new PrintWriter(file)){
+				
+				pwFile.println(auditDate.toString() + " " + logItem + " " + logItemLocation + " $" + newBalance);
+				
+			} catch (FileNotFoundException e) {
+				
+				e.printStackTrace();
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+		}
+			
+		public void printChangeLog() {
+				
+				File logFile = new File("Log.txt");
+				
+				if(!logFile.exists()) {
+					try {
+						logFile.createNewFile();
+					} catch (IOException e) {
+						System.out.println("Unable to create a new file.");
+					}
+				} 
+				
+				try(FileOutputStream file = new FileOutputStream(logFile, true);
+					PrintWriter pwFile = new PrintWriter(file)){
+					
+					pwFile.println(auditDate.toString() + " GIVE CHANGE: " + df.format(balance) + " $0.00");
+					
+				} catch (FileNotFoundException e) {
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				}
+			
+			
+		}
 		
 }

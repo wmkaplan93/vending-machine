@@ -180,7 +180,7 @@ public class VendingMachine {
 								productGenerator.get(userLocation).returnMessage();
 								System.out.println("Subtracting " + productGenerator.get(userLocation).getProductPrice() + " from your balance.");
 								newBalance = (df.format(balance -= Double.parseDouble(productGenerator.get(userLocation).getProductPrice())));
-								System.out.println("Remaining Balance: " + (newBalance));
+								System.out.println("Remaining Balance: " + newBalance);
 								printSalesLog();
 								System.out.println();
 							} else if ((int)inventoryCount.get(userLocation) == 0){
@@ -261,17 +261,20 @@ public class VendingMachine {
 			System.out.println("How much would you like to add? (1, 2, 5, 10 only) ");
 			System.out.println("Or type 'Q' to return to the purchase screen. ");
 			String moreMoney = userInput.nextLine();
-			if ("Q".equalsIgnoreCase(moreMoney)){
-				purchaseMenu();
-			} else if(Integer.parseInt(moreMoney) == 1 || Integer.parseInt(moreMoney) == 2 || Integer.parseInt(moreMoney) == 5 || Integer.parseInt(moreMoney) == 10) {
-				logMoreMoney = Integer.parseInt(moreMoney);
-				balance += Double.parseDouble(moreMoney);
-				System.out.println("Current Balance: " + df.format(balance));
-				printFeedLog();
-			} else {
+			try {
+				if ("Q".equalsIgnoreCase(moreMoney)){
+					purchaseMenu();
+				} else if(Integer.parseInt(moreMoney) == 1 || Integer.parseInt(moreMoney) == 2 || Integer.parseInt(moreMoney) == 5 || Integer.parseInt(moreMoney) == 10) {
+					logMoreMoney = Integer.parseInt(moreMoney);
+					balance += Double.parseDouble(moreMoney);
+					System.out.println("Current Balance: " + df.format(balance));
+					printFeedLog();
+				} else {
+					System.out.println("Please enter a valid whole dollar amount.");
+				}
+			} catch (NumberFormatException e) {
 				System.out.println("Please enter a valid whole dollar amount.");
 			}
-			
 		}
 		
 		//change method

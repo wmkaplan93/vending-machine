@@ -56,6 +56,10 @@ public class VendingMachine {
 		return inputFile;
 	}
 	
+	public double getBalance() {
+		return balance;
+	}
+	
 	DecimalFormat df = new DecimalFormat("#.##");
 	//*****
 
@@ -368,5 +372,6 @@ public class VendingMachine {
 			
 			
 		}
+		
 		
 }

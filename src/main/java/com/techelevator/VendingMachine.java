@@ -47,8 +47,6 @@ public class VendingMachine {
 		
 	}
 	
-	
-	
 	//*****
 	public Map<String, VendingMachineProduct> getProductGenerator() {
 		return productGenerator;
@@ -59,12 +57,6 @@ public class VendingMachine {
 	}
 	
 	DecimalFormat df = new DecimalFormat("#.##");
-	
-	
-	
-	
-	
-	
 	//*****
 
 	@SuppressWarnings("resource")
@@ -95,7 +87,7 @@ public class VendingMachine {
 				purchaseMenu();
 			} else if ("3".equals(userChoice)) {
 				System.out.println("Thank you, come again!");
-				returnChange();
+				returnChange(balance);
 				System.exit(0);
 			} else {
 				System.out.println("Sorry, that's not a valid selection, please try again.");
@@ -103,32 +95,6 @@ public class VendingMachine {
 			}
 		}
 	}
-	
-	
-	
-
-
-	public void getOptionsList() {
-		File f = new File(inputFile);
-		try (Scanner fileInput = new Scanner(f)) {
-			
-			while(fileInput.hasNextLine()) {
-				
-				String s = fileInput.nextLine();
-				String[] stringArray = s.split("\\|");
-				if (inventoryCount.get(stringArray[0]) == 0) {
-					System.out.println(s + ": SOLD OUT");
-				} else {
-					System.out.print(s + ": ");
-					System.out.println(inventoryCount.get(stringArray[0]) + " available");
-				}
-			}			
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-}
-	
 	
 	@SuppressWarnings("resource")
 	public void purchaseMenu() {
@@ -204,7 +170,19 @@ public class VendingMachine {
 					}
 
 				} else if("1".equals(userChoice)) {
-					feedMoney();
+					System.out.println("");
+					System.out.println("How much would you like to add? (1, 2, 5, 10 only) ");
+					System.out.println("Or '0' to cancel.");
+					String moreMoney = userInput.nextLine();
+					if ("1".equals(moreMoney) || "2".equals(moreMoney) || "5".equals(moreMoney) || "10".equals(moreMoney)) {
+						int intMoney = Integer.parseInt(moreMoney);
+						feedMoney(intMoney);
+						purchaseMenu();
+					} else if ("0".equals(moreMoney)) {
+						purchaseMenu();
+					} else {
+						System.out.println("Please enter a valid whole dollar amount.");
+					}
 				} else if("3".equals(userChoice)) {
 					mainMenu();
 				} else {
@@ -215,7 +193,7 @@ public class VendingMachine {
 	}
 	
 			
-		public void populateProductMap() {
+		public Map<String, VendingMachineProduct> populateProductMap() {
 			
 			
 			File f = new File(inputFile);
@@ -248,48 +226,56 @@ public class VendingMachine {
 				
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
-			}			
+			}
+			return productGenerator;
+		}
+		
+		//getOptionList method
+		public void getOptionsList() {
+			File f = new File(inputFile);
+			try (Scanner fileInput = new Scanner(f)) {
+				
+				while(fileInput.hasNextLine()) {
+					
+					String s = fileInput.nextLine();
+					String[] stringArray = s.split("\\|");
+					if (inventoryCount.get(stringArray[0]) == 0) {
+						System.out.println(s + ": SOLD OUT");
+					} else {
+						System.out.print(s + ": ");
+						System.out.println(inventoryCount.get(stringArray[0]) + " available");
+					}
+				}			
+				
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		
 		//feed money method
-		@SuppressWarnings("resource")
-		public void feedMoney() {
-			Scanner userInput = new Scanner(System.in);
-			
-			System.out.println("");
-			System.out.println("How much would you like to add? (1, 2, 5, 10 only) ");
-			System.out.println("Or type 'Q' to return to the purchase screen. ");
-			String moreMoney = userInput.nextLine();
-			try {
-				if ("Q".equalsIgnoreCase(moreMoney)){
-					purchaseMenu();
-				} else if(Integer.parseInt(moreMoney) == 1 || Integer.parseInt(moreMoney) == 2 || Integer.parseInt(moreMoney) == 5 || Integer.parseInt(moreMoney) == 10) {
-					logMoreMoney = Integer.parseInt(moreMoney);
-					balance += Double.parseDouble(moreMoney);
-					System.out.println("Current Balance: " + df.format(balance));
-					printFeedLog();
-				} else {
-					System.out.println("Please enter a valid whole dollar amount.");
-				}
-			} catch (NumberFormatException e) {
-				System.out.println("Please enter a valid whole dollar amount.");
-			}
+		public double feedMoney(int intMoney) {
+				logMoreMoney = intMoney;
+				balance += (double)intMoney;
+				System.out.println("Current Balance: " + df.format(balance));
+				printFeedLog();
+			return balance;
 		}
 		
 		//change method
 		
-		public void returnChange() {
+		public int[] returnChange(double balance) {
+			int[] b = new int[4];
 			int countQ = 0;
 			int countD = 0;
 			int countN = 0;
 			int countP = 0;
 			printChangeLog();
 			balance = Double.parseDouble(df.format(balance * 100)); //320 cents
-			countQ = (int) (balance / 25); //12 quarters, 20 cents
-			countD = (int) ((balance % 25) / 10); //2 dimes, 0 cents
-			countN = (int) (((balance % 25) % 10) / 5);
-			countP = (int) ((((balance % 25) % 10) % 5) / 1);
+			b[0] = countQ = (int) (balance / 25); //12 quarters, 20 cents
+			b[1] = countD = (int) ((balance % 25) / 10); //2 dimes, 0 cents
+			b[2] = countN = (int) (((balance % 25) % 10) / 5);
+			b[3] = countP = (int) ((((balance % 25) % 10) % 5) / 1);
 			System.out.println("Your change is: ");
 			System.out.println(balance / 100);
 			System.out.println(countQ + " Quarters");
@@ -298,6 +284,7 @@ public class VendingMachine {
 			System.out.println(countP + " Pennies");
 			System.out.println("");
 			System.out.println("Have a Vend-tastic day!");
+			return b;
 		}
 		
 		

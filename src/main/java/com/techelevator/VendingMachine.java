@@ -168,7 +168,7 @@ public class VendingMachine {
 						System.out.println("");
 						System.out.println("What would you like? [B1, C2 (Or type 'Q' to return)] ");
 						System.out.println("");
-						String userLocation = userInput.nextLine();
+						String userLocation = userInput.nextLine().toUpperCase();
 						if ("Q".equalsIgnoreCase(userLocation)) {
 							purchaseMenu();
 						} else if(balance >= Double.parseDouble(productGenerator.get(userLocation).getProductPrice())) {
@@ -179,8 +179,8 @@ public class VendingMachine {
 								System.out.print(" selected. ");
 								productGenerator.get(userLocation).returnMessage();
 								System.out.println("Subtracting " + productGenerator.get(userLocation).getProductPrice() + " from your balance.");
-								System.out.println("Remaining Balance: " + (df.format(balance -= Double.parseDouble(productGenerator.get(userLocation).getProductPrice()))));
 								newBalance = (df.format(balance -= Double.parseDouble(productGenerator.get(userLocation).getProductPrice())));
+								System.out.println("Remaining Balance: " + (newBalance));
 								printSalesLog();
 								System.out.println();
 							} else if ((int)inventoryCount.get(userLocation) == 0){
